@@ -1,5 +1,5 @@
-'''This code is meant to help show the geometric deriviation
-of the ellipse using math and matplotlib'''
+'''The *Geometric deriviation of an ellipse* pretty dope
+stuff imo'''
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,7 +14,8 @@ def ellipseFunc(majorAxis, minorAxis, x, upperLower=False):
     return output
 
 #data
-majorAxis = pyip.inputFloat(prompt='Type the major axis here: ')
+print("Note: The major axis needs to be greater than the foci dist")
+majorAxis = pyip.inputFloat(prompt='Type half the length of the major axis here: ')
 fociDist = pyip.inputFloat(prompt='Input foci dist here: ')
 minorAxis = np.sqrt(majorAxis**2 - fociDist**2)
 xVals = list(np.arange(-1*majorAxis, majorAxis, 0.01))
@@ -31,10 +32,14 @@ fig, ax = plt.subplots()
 plt.style.use('seaborn-v0_8')
 plt.grid(True)
 ellipse = ax.plot(xVals[0], yVals[0], color='black')[0] #The actual ellipse
-lineF1 = ax.plot(-1*fociDist, 0, color='red')[0] #Foci one
+mesage = """The sum of the distances from every point on the parabola
+to each foci is equal to the major axis!"""
+lineF1 = ax.plot(-1*fociDist, 0, color='red', label=mesage)[0] #Foci one
 lineF2 = ax.plot(fociDist, 0, color='red')[0] #Foci two
 lineTV1 = ax.plot(xVals[0], 0, linestyle='dashed')[0] #Vertial line to show right triangles
-ax.set(xlim=[-6,6], ylim=[-6,6])
+foci1 = ax.scatter(-1*fociDist, 0, color='darkorange', s=80, label='Foci')
+foci2 = ax.scatter(fociDist, 0, color='darkorange', s=80)
+ax.set(xlim=[((-1*majorAxis)-2), (majorAxis+2)], ylim=[((-1*majorAxis)-2), (majorAxis+2)])
 
 #animates the plot
 def animateElipse(frame):
@@ -59,10 +64,10 @@ def animateElipse(frame):
     lineTV1.set_xdata(xlineTV1)
     lineTV1.set_ydata(ylineTV1)
 
+    return (ellipse, lineF1, lineF2, lineTV1, foci1)
 
-    return (ellipse, lineF1, lineF2, lineTV1)
-
-animated = animation.FuncAnimation(fig=fig, func=animateElipse, frames=numFrames, interval=20,)
+animated = animation.FuncAnimation(fig=fig, func=animateElipse, frames=numFrames, interval=10,)
+plt.legend()
 plt.show()
 
 
